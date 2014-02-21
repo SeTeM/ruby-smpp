@@ -1,4 +1,5 @@
 #encoding: ASCII-8BIT
+
 require 'iconv' if RUBY_VERSION =~ /\A1\.(8|9)/
 
 module Smpp
@@ -29,12 +30,21 @@ module Smpp
             alternate_lookup = lookup.bytes.first if has_encoding?(lookup)
             GSM_ESCAPED_CHARACTERS[lookup] || GSM_ESCAPED_CHARACTERS[alternate_lookup]
           end
-          sm = Iconv.conv("UTF-8", "HP-ROMAN8", sm)
+          if RUBY_VERSION =~ /\A1\.(8|9)/
+            sm = Iconv.conv("UTF-8", "HP-ROMAN8", sm)
+          else
+            # FIXME: macroman is not HP-ROMAN8. we should find HP-ROMAN8 for String#encode
+            sm = sm.encode("UTF-8", "macroman", invalid: :replace, replace: '')
+          end
           euro_token = "\342\202\254"
           euro_token.force_encoding("UTF-8") if has_encoding?(euro_token)
           sm.gsub(EURO_TOKEN, euro_token)
         elsif data_coding == 8
-          Iconv.conv("UTF-8", "UTF-16BE", short_message)
+          if RUBY_VERSION =~ /\A1\.(8|9)/
+            Iconv.conv("UTF-8", "UTF-16BE", short_message)
+          else
+            short_message.encode("UTF-8", "UTF-16BE", invalid: :replace, replace: '')
+          end
         else
           short_message
         end

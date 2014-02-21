@@ -12,7 +12,7 @@ class Smpp::Pdu::BindBase < Smpp::Pdu::Base
       system_id, password, system_type, addr_ton, addr_npi, address_range
 
     seq ||= next_sequence_number
-    body = sprintf("%s\0%s\0%s\0%c%c%c%s\0", system_id, password,system_type, PROTOCOL_VERSION, addr_ton, addr_npi, address_range)
+    body = sprintf("%s\0%s\0%s\0%c%c%c%s\0", system_id, password, system_type.to_s, PROTOCOL_VERSION, addr_ton, addr_npi, address_range.to_s)
     super(self.class.command_id, 0, seq, body)
   end
 
