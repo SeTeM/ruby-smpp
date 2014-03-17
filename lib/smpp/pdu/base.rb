@@ -72,6 +72,7 @@ module Smpp::Pdu
     ESM_CLASS_DELVR_REP    = 4
     ESM_CLASS_DELVR_ACK    = 8
     ESM_CLASS_USER_ACK     = 16
+    ESM_CLASS_MO_RECEIVE   = 28 # tele2 specifix
     ESM_CLASS_INTER_ACK    = 32
     ESM_CLASS_DEFAULT_UDHI = 64
 

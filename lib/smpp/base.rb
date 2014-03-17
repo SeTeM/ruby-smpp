@@ -162,7 +162,7 @@ module Smpp
         begin
           logger.debug "ESM CLASS #{pdu.esm_class}"
           case pdu.esm_class
-          when Pdu::Base::ESM_CLASS_DEFAULT, Pdu::Base::ESM_CLASS_DEFAULT_UDHI
+          when Pdu::Base::ESM_CLASS_DEFAULT, Pdu::Base::ESM_CLASS_DEFAULT_UDHI, Pdu::Base::ESM_CLASS_MO_RECEIVE
             # MO message
             run_callback(:mo_received, self, pdu)
           when Pdu::Base::ESM_CLASS_DELVR_REP, Pdu::Base::ESM_CLASS_DELVR_ACK, Pdu::Base::ESM_CLASS_USER_ACK, Pdu::Base::ESM_CLASS_INTER_ACK
