@@ -160,18 +160,25 @@ module Smpp
         close_connection
       when Pdu::DeliverSm
         begin
+          return_args = nil
+          action = nil
           logger.debug "ESM CLASS #{pdu.esm_class}"
           case pdu.esm_class
           when Pdu::Base::ESM_CLASS_DEFAULT, Pdu::Base::ESM_CLASS_DEFAULT_UDHI, Pdu::Base::ESM_CLASS_MO_RECEIVE
             # MO message
-            run_callback(:mo_received, self, pdu)
+            action = :mo_received
+            return_args = run_callback(action, self, pdu)
           when Pdu::Base::ESM_CLASS_DELVR_REP, Pdu::Base::ESM_CLASS_DELVR_ACK, Pdu::Base::ESM_CLASS_USER_ACK, Pdu::Base::ESM_CLASS_INTER_ACK
             # Delivery report
-            run_callback(:delivery_report_received, self, pdu)
+            action = :delivery_report_received
+            return_args = run_callback(action, self, pdu)
           else
             raise "Unknown ESM Class #{pdu.esm_class}"
           end
           write_pdu(Pdu::DeliverSmResponse.new(pdu.sequence_number))
+          if action == :mo_received
+            run_callback(:after_mo_received, self, pdu, return_args)
+          end
         rescue => e
           logger.warn "Send Receiver Temporary App Error due to #{e.inspect} raised in delegate"
           write_pdu(Pdu::DeliverSmResponse.new(pdu.sequence_number, Pdu::Base::ESME_RX_T_APPN))
