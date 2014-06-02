@@ -181,6 +181,7 @@ module Smpp
           end
         rescue => e
           logger.warn "Send Receiver Temporary App Error due to #{e.inspect} raised in delegate"
+          run_callback(:notify_delegate_error, self, pdu, e)
           write_pdu(Pdu::DeliverSmResponse.new(pdu.sequence_number, Pdu::Base::ESME_RX_T_APPN))
         end
       when Pdu::BindTransceiverResponse
