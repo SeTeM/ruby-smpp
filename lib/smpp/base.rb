@@ -164,7 +164,7 @@ module Smpp
           action = nil
           logger.debug "ESM CLASS #{pdu.esm_class}"
           case pdu.esm_class
-          when Pdu::Base::ESM_CLASS_DEFAULT, Pdu::Base::ESM_CLASS_DEFAULT_UDHI, Pdu::Base::ESM_CLASS_MO_RECEIVE
+          when Pdu::Base::ESM_CLASS_DEFAULT, Pdu::Base::ESM_CLASS_DEFAULT_UDHI, Pdu::Base::ESM_CLASS_MO_RECEIVE, Pdu::Base::ESM_CLASS_USER_ACTION
             # MO message
             action = :mo_received
             return_args = run_callback(action, self, pdu)
