@@ -164,7 +164,7 @@ module Smpp
           action = nil
           logger.debug "ESM CLASS #{pdu.esm_class}"
           case pdu.esm_class
-          when Pdu::Base::ESM_CLASS_DEFAULT, Pdu::Base::ESM_CLASS_DEFAULT_UDHI, Pdu::Base::ESM_CLASS_MO_RECEIVE, Pdu::Base::ESM_CLASS_USER_ACTION
+          when Pdu::Base::ESM_CLASS_DEFAULT, Pdu::Base::ESM_CLASS_DEFAULT_UDHI, Pdu::Base::ESM_CLASS_MO_RECEIVE
             # MO message
             action = :mo_received
             return_args = run_callback(action, self, pdu)
@@ -172,6 +172,9 @@ module Smpp
             # Delivery report
             action = :delivery_report_received
             return_args = run_callback(action, self, pdu)
+          when Pdu::Base::ESM_CLASS_RAW_MESSAGE
+            # do nothing, just send deliver_sm_resp
+            action = :raw_mo_received
           else
             raise "Unknown ESM Class #{pdu.esm_class}"
           end

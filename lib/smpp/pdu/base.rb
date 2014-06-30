@@ -69,7 +69,7 @@ module Smpp::Pdu
 
     #ESM Classes
     ESM_CLASS_DEFAULT      = 0
-    ESM_CLASS_USER_ACTION  = 3 # tele2 specifix
+    ESM_CLASS_RAW_MESSAGE  = 3 # tele2 specific
     ESM_CLASS_DELVR_REP    = 4
     ESM_CLASS_DELVR_ACK    = 8
     ESM_CLASS_USER_ACK     = 16
